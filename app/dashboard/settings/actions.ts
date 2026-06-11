@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { isDemoMode } from "@/lib/demo-auth";
 import { revalidatePath } from "next/cache";
 import { US_STATES, isValidZip } from "@/lib/format";
 
@@ -17,6 +18,11 @@ export async function updateProfileAction(
   const lastName = (formData.get("lastName") as string)?.trim();
 
   if (!firstName) return { error: "First name is required." };
+
+  if (isDemoMode()) {
+    revalidatePath("/dashboard");
+    return { success: true };
+  }
 
   const supabase = await createClient();
   const {
@@ -58,6 +64,10 @@ export async function updateAddressAction(
     return { error: "Please enter a valid ZIP code." };
   }
 
+  if (isDemoMode()) {
+    return { success: true };
+  }
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -84,6 +94,10 @@ export async function updateNotificationsAction(
   const orderUpdates = formData.get("orderUpdates") === "on";
   const marketing = formData.get("marketing") === "on";
 
+  if (isDemoMode()) {
+    return { success: true };
+  }
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -104,6 +118,10 @@ export async function updateNotificationsAction(
 }
 
 export async function deleteAccountAction(): Promise<ActionResult> {
+  if (isDemoMode()) {
+    return { success: true };
+  }
+
   const supabase = await createClient();
   const {
     data: { user },

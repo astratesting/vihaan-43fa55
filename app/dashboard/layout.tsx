@@ -1,6 +1,7 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getUser } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import DashboardShell from "@/components/dashboard/DashboardShell";
+import { isDemoMode } from "@/lib/demo-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -9,14 +10,25 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getUser();
 
   if (!user) {
     redirect("/login");
   }
+
+  // In demo mode, use email as the display name
+  if (isDemoMode()) {
+    return (
+      <DashboardShell
+        firstName={user.email?.split("@")[0] || "Demo"}
+        lastName=""
+      >
+        {children}
+      </DashboardShell>
+    );
+  }
+
+  const supabase = await createClient();
 
   // Fetch profile for the topbar
   const { data: profile } = await supabase

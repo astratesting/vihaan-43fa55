@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getUser } from "@/lib/supabase/server";
-import { getServiceClient } from "@/lib/supabase/service";
+import { isDemoMode, clearDemoAuth } from "@/lib/demo-auth";
 
 export async function POST() {
   const user = await getUser();
@@ -9,6 +9,12 @@ export async function POST() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  if (isDemoMode()) {
+    await clearDemoAuth();
+    return NextResponse.json({ message: "Account deleted." });
+  }
+
+  const { getServiceClient } = await import("@/lib/supabase/service");
   const serviceClient = getServiceClient();
   const { error } = await serviceClient.auth.admin.deleteUser(user.id);
 

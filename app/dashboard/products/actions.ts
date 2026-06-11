@@ -1,6 +1,8 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/supabase/server";
+import { isDemoMode } from "@/lib/demo-auth";
 import { revalidatePath } from "next/cache";
 
 interface ActionResult {
@@ -9,6 +11,12 @@ interface ActionResult {
 }
 
 export async function updateSkuAction(sku: string): Promise<ActionResult> {
+  if (isDemoMode()) {
+    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/products");
+    return { success: true };
+  }
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -29,6 +37,11 @@ export async function updateSkuAction(sku: string): Promise<ActionResult> {
 }
 
 export async function pauseSubscriptionAction(): Promise<ActionResult> {
+  if (isDemoMode()) {
+    revalidatePath("/dashboard");
+    return { success: true };
+  }
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -55,6 +68,11 @@ export async function pauseSubscriptionAction(): Promise<ActionResult> {
 }
 
 export async function resumeSubscriptionAction(): Promise<ActionResult> {
+  if (isDemoMode()) {
+    revalidatePath("/dashboard");
+    return { success: true };
+  }
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -85,6 +103,11 @@ export async function resumeSubscriptionAction(): Promise<ActionResult> {
 }
 
 export async function cancelSubscriptionAction(): Promise<ActionResult> {
+  if (isDemoMode()) {
+    revalidatePath("/dashboard");
+    return { success: true };
+  }
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -109,6 +132,11 @@ export async function cancelSubscriptionAction(): Promise<ActionResult> {
 }
 
 export async function activateSubscriptionAction(plan: string): Promise<ActionResult> {
+  if (isDemoMode()) {
+    revalidatePath("/dashboard");
+    return { success: true };
+  }
+
   const supabase = await createClient();
   const {
     data: { user },
