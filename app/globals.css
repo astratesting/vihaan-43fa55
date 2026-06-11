@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-primary: #7B5EA7;
+  --color-primary-light: #9B7EC7;
+  --color-primary-dark: #5A3D87;
+  --color-accent: #FF6F61;
+  --color-accent-light: #FF8A7E;
+  --color-accent-dark: #E04E40;
+  --color-secondary: #F4C430;
+  --color-secondary-light: #F7D060;
+  --color-secondary-dark: #D4A420;
+  --color-background: #FFF9F0;
+  --color-surface: #FFFFFF;
+  --color-ink: #2A2233;
+  --color-muted: #6B5B7B;
+  --color-success: #5BB97A;
+  --color-warning: #E8A93C;
+  --color-danger: #D85B5B;
+  --color-border: #EDE3D4;
+  --font-heading: "Manrope", sans-serif;
+  --font-body: "Source Sans 3", sans-serif;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  line-height: 1.65;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+/* Focus ring */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.animate-slide-in-right {
+  animation: slideInRight 0.2s ease-out forwards;
+}
